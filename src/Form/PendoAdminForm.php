@@ -44,7 +44,7 @@ class PendoAdminForm extends ConfigFormBase {
    */
   protected function getEditableConfigNames() {
     return [
-      'pendo.pendoadmin',
+      'pendo.settings',
     ];
   }
 
