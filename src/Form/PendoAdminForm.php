@@ -5,6 +5,7 @@ namespace Drupal\pendo\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -86,6 +87,8 @@ class PendoAdminForm extends ConfigFormBase {
     $this->config('pendo.settings')
       ->set('api_key', $form_state->getValue('api_key'))
       ->save();
+
+    $this->messenger()->addMessage("You may need to clear caches for your new API key to correctly load in page markup", MessengerInterface::TYPE_STATUS);
   }
 
 }
