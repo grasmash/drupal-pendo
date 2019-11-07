@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file
+ * Contains pendo.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function pendo_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the pendo module.
+    case 'help.page.pendo':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Provides integration with Pendo software.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function pendo_theme() {
+  return [
+    'pendo' => [
+      'render element' => 'children',
+      'variables' => [
+        'api_key' => NULL,
+        'user_email' => NULL,
+        'user_uuid' => NULL,
+      ],
+    ],
+  ];
+}
