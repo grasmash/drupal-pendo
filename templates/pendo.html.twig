@@ -1,3 +1,4 @@
+<!-- Pendo script -->
 <script>
     // Immediately-invoked function expression to prevent scope pollution...
     (function(apiKey){ // <-- passed in at the bottom
@@ -14,7 +15,7 @@
         pendo.initialize({
             visitor: {
                 id: '{{ user_uuid }}', // Required if user is logged in
-                // email: '{{ user_email }}'
+                email: '{{ user_email }}'
                 // full_name:    // Recommended if using Pendo Feedback
                 // role:         // Optional
 
@@ -35,5 +36,5 @@
                 // as long as it's not one of the above reserved names.
             }
         });
-    })('{{ api_key }}'); // <--- You should change this.
+    })('{{ api_key }}'); //
 </script>

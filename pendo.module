@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\user\Entity\User;
 
 /**
  * Implements hook_help().
@@ -29,12 +30,24 @@ function pendo_help($route_name, RouteMatchInterface $route_match) {
 function pendo_theme() {
   return [
     'pendo' => [
-      'render element' => 'children',
       'variables' => [
-        'api_key' => NULL,
+        'api_key' => \Drupal::config('pendo.settings')->get('api_key'),
+        'application_id' => \Drupal::config('system.site')->get('uuid'),
         'user_email' => NULL,
         'user_uuid' => NULL,
       ],
     ],
   ];
+}
+
+/**
+ * Implements hook_page_bottom().
+ */
+function pendo_page_bottom(array &$page_bottom){
+  // As per pendo instructions, this script must appear exactly once on all pages.
+  $page_bottom['pendo'] = array(
+    '#theme' => 'pendo',
+    '#user_uuid' => User::load(\Drupal::currentUser()->id())->uuid(),
+    '#user_email' => \Drupal::currentUser()->getEmail(),
+  );
 }
