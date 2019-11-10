@@ -14,17 +14,20 @@
         // Please use Strings, Numbers, or Bools for value types.
         pendo.initialize({
             visitor: {
-                id: '{{ user_uuid }}', // Required if user is logged in
-                email: '{{ user_email }}'
-                // full_name:    // Recommended if using Pendo Feedback
-                // role:         // Optional
+                id: '{{ visitor.id }}', // Required if user is logged in
+                email: '{{ visitor.email }}',
+                full_name: '{{ visitor.full_name }}',
+                role: '{{ visitor.role }}'
 
                 // You can add any additional visitor level key-values here,
                 // as long as it's not one of the above reserved names.
+              {% for key,value in visitor.other %}
+                ,'{{ key }}': '{{ value }}'
+              {% endfor %}
             },
 
             account: {
-                id: '{{ application_id }}' // Highly recommended
+                id: '{{ account.id }}' // Highly recommended
                 // name:         // Optional
                 // is_paying:    // Recommended if using Pendo Feedback
                 // monthly_value:// Recommended if using Pendo Feedback
@@ -34,6 +37,9 @@
 
                 // You can add any additional account level key-values here,
                 // as long as it's not one of the above reserved names.
+              {% for key,value in account.other %}
+                ,'{{ key }}': '{{ value }}'
+              {% endfor %}
             }
         });
     })('{{ api_key }}'); //

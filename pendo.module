@@ -32,9 +32,23 @@ function pendo_theme() {
     'pendo' => [
       'variables' => [
         'api_key' => \Drupal::config('pendo.settings')->get('api_key'),
-        'application_id' => \Drupal::config('system.site')->get('uuid'),
-        'user_email' => NULL,
-        'user_uuid' => NULL,
+        'visitor' => [
+          'email' => NULL,
+          'id' => NULL,
+          'full_name' => NULL,
+          'role' => NULL,
+          'other' => [],
+        ],
+        'account' => [
+          'id' => \Drupal::config('system.site')->get('uuid'),
+          'name' => NULL,
+          'is_paying' => NULL,
+          'monthly_value' => NULL,
+          'planLevel' => NULL,
+          'planPrice' => NULL,
+          'creationDate' => NULL,
+          'other' => [],
+        ]
       ],
     ],
   ];
@@ -47,7 +61,24 @@ function pendo_page_bottom(array &$page_bottom){
   // As per pendo instructions, this script must appear exactly once on all pages.
   $page_bottom['pendo'] = array(
     '#theme' => 'pendo',
-    '#user_uuid' => User::load(\Drupal::currentUser()->id())->uuid(),
-    '#user_email' => \Drupal::currentUser()->getEmail(),
   );
+  $page_bottom['pendo']['visitor']['id'] = User::load(\Drupal::currentUser()->id())->uuid();
+  $page_bottom['pendo']['visitor']['email'] = \Drupal::currentUser()->getEmail();
+
+  putenv('AH_SITE_GROUP=eemgrasmick');
+  // Acquia.
+  $acquia_env_vars = [
+    'AH_CURRENT_REGION',
+    'AH_SITE_NAME',
+    'AH_APPLICATION_UUID',
+    'AH_REALM',
+    'AH_NON_PRODUCTION',
+    'AH_SITE_ENVIRONMENT',
+    'AH_SITE_GROUP',
+  ];
+  foreach ($acquia_env_vars as $value) {
+    if (getenv($value) !== FALSE) {
+      $page_bottom['pendo']['account']['other'][$value] = getenv($value);
+    }
+  }
 }
