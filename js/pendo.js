@@ -1,5 +1,5 @@
 (function ($, Drupal, drupalSettings) {
-  Drupal.behaviors.LotusBehavior = {
+  Drupal.behaviors.pendo = {
     attach: function (context, settings) {
 
       // Immediately-invoked function expression to prevent scope pollution...
@@ -16,7 +16,6 @@
         // Please use Strings, Numbers, or Bools for value types.
         pendo.initialize(drupalSettings.pendo.data);
       })(drupalSettings.pendo.api_key); //
-
     }
   };
 })(jQuery, Drupal, drupalSettings);
