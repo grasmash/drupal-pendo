@@ -88,7 +88,7 @@ class PendoAdminForm extends ConfigFormBase {
       ->set('api_key', $form_state->getValue('api_key'))
       ->save();
 
-    $this->messenger()->addMessage("You may need to clear caches for your new API key to correctly load in page markup", MessengerInterface::TYPE_STATUS);
+    $this->messenger()->addMessage("You may need to clear caches for your new API key to correctly load in page markup.", MessengerInterface::TYPE_STATUS);
   }
 
 }

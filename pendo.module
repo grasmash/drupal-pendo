@@ -25,45 +25,13 @@ function pendo_help($route_name, RouteMatchInterface $route_match) {
 }
 
 /**
- * Implements hook_theme().
+ * @param $variables
  */
-function pendo_theme() {
-  return [
-    'pendo' => [
-      'variables' => [
-        'api_key' => \Drupal::config('pendo.settings')->get('api_key'),
-        'visitor' => [
-          'email' => NULL,
-          'id' => NULL,
-          'full_name' => NULL,
-          'role' => NULL,
-          'other' => [],
-        ],
-        'account' => [
-          'id' => \Drupal::config('system.site')->get('uuid'),
-          'name' => NULL,
-          'is_paying' => NULL,
-          'monthly_value' => NULL,
-          'planLevel' => NULL,
-          'planPrice' => NULL,
-          'creationDate' => NULL,
-          'other' => [],
-        ]
-      ],
-    ],
-  ];
-}
-
-/**
- * Implements hook_page_bottom().
- */
-function pendo_page_bottom(array &$page_bottom){
-  // As per pendo instructions, this script must appear exactly once on all pages.
-  $page_bottom['pendo'] = array(
-    '#theme' => 'pendo',
-  );
-  $page_bottom['pendo']['visitor']['id'] = User::load(\Drupal::currentUser()->id())->uuid();
-  $page_bottom['pendo']['visitor']['email'] = \Drupal::currentUser()->getEmail();
+function pendo_preprocess_html(&$variables) {
+  $variables['#attached']['library'][] = 'pendo/pendo-js';
+  $variables['#attached']['drupalSettings']['pendo']['api_key'] = \Drupal::config('pendo.settings')->get('api_key');
+  $variables['#attached']['drupalSettings']['pendo']['data']['visitor']['id'] = User::load(\Drupal::currentUser()->id())->uuid();
+  $variables['#attached']['drupalSettings']['pendo']['data']['visitor']['email'] = \Drupal::currentUser()->getEmail();
 
   putenv('AH_SITE_GROUP=eemgrasmick');
   // Acquia.
@@ -78,7 +46,7 @@ function pendo_page_bottom(array &$page_bottom){
   ];
   foreach ($acquia_env_vars as $value) {
     if (getenv($value) !== FALSE) {
-      $page_bottom['pendo']['account']['other'][$value] = getenv($value);
+      $variables['#attached']['drupalSettings']['pendo']['data']['account'][$value] = getenv($value);
     }
   }
 }
